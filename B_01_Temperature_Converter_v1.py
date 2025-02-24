@@ -3,6 +3,7 @@ from functools import partial # To prevent unwanted windows
 import all_constants as c
 import conversion_rounding as cr
 
+
 class Converter():
     """
     Temperature conversion tool (°C to °F or °F to °C)
@@ -23,7 +24,7 @@ class Converter():
                                   font=("Arial", "16", "bold"))
         self.temp_heading.grid(row=0)
 
-        instructions = ("Please enter a temperature below and then press one of the buttons" \
+        instructions = ("Please enter a temperature below and then press one of the buttons" 
                        "to convert it from centigrade to fahrenheit.")
         self.temp_instructions = Label(self.temp_frame, text=instructions, wraplength=250,
                                        width=40, justify="left")
@@ -36,14 +37,14 @@ class Converter():
         self.answer_error = Label(self.temp_frame, text=error, fg="#004C99", font=("Arial", "14", "bold"))
         self.answer_error.grid(row=3)
 
-        # Coversion help and history / export buttons
+        # Conversion help and history / export buttons
         self.button_frame = Frame(self.temp_frame)
         self.button_frame.grid(row=4)
 
         # button list (button text | bg colour | command | row | column)
         button_details_list = [
             ["To Celsius", "#990099", lambda:self.check_temp(c.ABS_ZERO_FAHRENHIET), 0, 0],
-            ["To Fahrneheit", "#009900", lambda:self.check_temp(c.ABS_ZERO_CELSIUS), 0, 1],
+            ["To Fahrenheit", "#009900", lambda:self.check_temp(c.ABS_ZERO_CELSIUS), 0, 1],
             ["Help / Info", "#CC6600", self.to_help, 1, 0],
             ["History / Export", "#004C99", "", 1, 1]
         ]
@@ -58,7 +59,7 @@ class Converter():
 
             self.button_ref_list.append(self.make_button)
 
-        # retrive to_helpp button
+        # retrieve to_help button
         self.to_help_button = self.button_ref_list[2]
         
         # retrieve 'history / export' button and disable it at the start
@@ -167,7 +168,7 @@ class DisplayHelp:
         recolour_list = [self.help_frame, self.help_hearing_label, self.help_text_label]
 
         for item in recolour_list:
-            item. config(bg=background)
+            item.config(bg=background)
 
     def close_help(self, partner):
         partner.to_help_button.config(state=NORMAL)
@@ -177,7 +178,7 @@ class DisplayHelp:
 # main routine
 if __name__ == "__main__":
     root = Tk()
-    root.title("Temperature Coverter")
+    root.title("Temperature Converter")
     Converter()
     root.mainloop()
 

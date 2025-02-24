@@ -1,10 +1,15 @@
 from tkinter import *
 from functools import partial # to prevent unwanted windows
+import all_constants as c
 
 
 class Converter:
 
     def __init__(self):
+
+        self.all_calculations_list = ['10.0°F is -12°C', '20.0°F is -7°C', '30.0°F is -1°C', '40.0°F is 4°C',
+                                      '50.0°F is 10°C', '60.0°F is 16°C']
+
         self.temp_frame = Frame(padx=10, pady=10)
         self.temp_frame.grid()
 
@@ -19,7 +24,7 @@ class Converter:
         Opens history dialogue box and disables history button
         (so that users can't create multiple history boxes)
         """
-        HistoryExport(self)
+        HistoryExport(self, self.all_calculations_list)
 
 
 class HistoryExport:
@@ -27,11 +32,7 @@ class HistoryExport:
     Displays history dialogue box
     """
 
-    def __init__(self, partner):
-        # setup dialogue box and background colour
-
-        green_back = "#D5E8D4"
-        peach_back = "#ffe6cc"
+    def __init__(self, partner, calculations):
 
         self.history_box = Toplevel()
 
@@ -45,8 +46,16 @@ class HistoryExport:
         self.history_frame = Frame(self.history_box)
         self.history_frame.grid()
 
+        # background colour and text for calculation area
+        if len(calculations) <= c.MAX_CALCS:
+            calc_back = "#D5E8D4"
+            calc_amount = "all your"
+        else:
+            calc_back = "#ffe6cc"
+            calc_amount = (f"your recent calculations - showing {c.MAX_CALCS} / {len(calculations)}")
+
         # strings for long labels
-        recent_intro_txt = ("Below are your recent calculations - showing 3 / 3 calculations."
+        recent_intro_txt = (f"Below are {calc_amount} calculations."
                             "All calculations are shown to the nearest degree")
 
         export_instruction_txt = ("Please push <Export> to save your calculations in a file"
@@ -58,7 +67,7 @@ class HistoryExport:
         history_labels_list = [
             ["History / Export", ("Arial", "16", "bold"), None],
             [recent_intro_txt, ("Arial", "11"), None],
-            ["calculation list", ("Arial", "14"), green_back],
+            ["calculation list", ("Arial", "14"), calc_back],
             [export_instruction_txt, ("Arial", "11"), None]
         ]
 
