@@ -1,6 +1,7 @@
 from tkinter import *
 from functools import partial  # to prevent unwanted windows
 import all_constants as c
+from datetime import date
 
 
 class Converter:
@@ -10,7 +11,7 @@ class Converter:
         # '50.0°F is 10°C', '60.0°F is 16°C']
 
         self.all_calculations_list = ['10.0°F is -12°C', '20.0°F is -7°C', '30.0°F is -1°C', '40.0°F is 4°C',
-                                      '50.0°F is 10°C', '60.0°F is 16°C']
+                                      '50.0°F is 10°C', 'This is a test']
 
         self.temp_frame = Frame(padx=10, pady=10)
         self.temp_frame.grid()
@@ -81,8 +82,6 @@ class HistoryExport:
         export_instruction_txt = ("Please push <Export> to save your calculations in a file"
                                   "If the filename already exists, it will be replaced")
 
-        calculations = ""
-
         # Label list (label text | format | bg)
         history_labels_list = [
             ["History / Export", ("Arial", "16", "bold"), None],
@@ -111,7 +110,7 @@ class HistoryExport:
 
         # button list
         button_details_list = [
-            ["Export", '#004C99', "", 0, 0],
+            ["Export", '#004C99', lambda: self.export_data(calculations), 0, 0],
             ["Close", "#666666", partial(self.close_history, partner), 0, 1]
         ]
 
@@ -119,6 +118,36 @@ class HistoryExport:
             self.make_button = Button(self.hist_button_frame, font=("Arial", "12", "bold"),
                                       text=btn[0], bg=btn[1], fg="#FFFFFF", width=12, command=btn[2])
             self.make_button.grid(row=btn[3], column=btn[4], padx=10, pady=10)
+
+    def export_data(self, calculations):
+        # ***** Get current date for heading and filename *****
+        today = date.today()
+
+        # Get day, month and year as individual strings
+        day = today.strftime("%d")
+        month = today.strftime("%m")
+        year = today.strftime("%Y")
+
+        file_name = f"temperatures_{year}_{month}_{day}"
+
+        # edit label so users know that their export has been done
+        success_string = ("Export Successful. The file is called "
+                          f"{file_name}.txt")
+        self.export_filename_label.config(fg="#009900", text=success_string, font=("Arial",
+                                                                                  "12", "bold"))
+
+        # write data to text file
+        write_to = f"{file_name}.txt"
+
+        with open(write_to, "w") as text_file:
+            text_file.write("***** Temperature Calculations *****\n")
+            text_file.write(f"Generated: {day}/{month}/{year}\n\n")
+            text_file.write("Here is your calculation history (oldest to newest)...\n")
+
+            # write the item to file
+            for item in calculations:
+                text_file.write(item)
+                text_file.write("\n")
 
     def close_history(self, partner):
 
